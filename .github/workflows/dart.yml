@@ -27,16 +27,14 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed -o none .
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
-        run: dart analyze
+        run: dart analyze --fatal-warnings --fatal-infos .
 
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
-      - name: Run tests
-        run: dart test
+      - name: Run vm tests
+        run: pub run test -p vm -r expanded
+
+      - name: Run dart2js tests
+        run: pub run test -p chrome -x fails-on-dart2js -r expanded
